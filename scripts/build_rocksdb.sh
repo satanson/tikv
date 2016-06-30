@@ -1,12 +1,13 @@
 #!/bin/bash
 
 echo "building rocksdb..."
-cd $DEPS_PATH
-mkdir -p ${DEPS_PATH}
+mkdir -p ${DIST_PATH}
+cd $DIST_PATH
 
 case "$OSTYPE" in 
     linux*) 
         if [ ! -d rocksdb-rocksdb-4.6.1 ]; then
+            echo "installing zlib1g-dev libbz2-dev libsnappy-dev libgflags-dev liblz4-dev"
             sudo apt-get update 
             sudo apt-get install -y --no-install-recommends zlib1g-dev libbz2-dev libsnappy-dev libgflags-dev liblz4-dev 
             curl -L https://github.com/facebook/rocksdb/archive/rocksdb-4.6.1.tar.gz -o rocksdb.tar.gz 

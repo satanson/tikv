@@ -1,6 +1,6 @@
 ENABLE_FEATURES ?= dev
 
-DEPS_PATH = $(CURDIR)/tmp
+DIST_PATH = $(CURDIR)/dist
 BIN_PATH = $(CURDIR)/bin
 
 .PHONY: all
@@ -30,20 +30,20 @@ format:
 	@rustfmt --write-mode diff tests/tests.rs benches/benches.rs | grep "Diff at line" > /dev/null && rustfmt --write-mode overwrite tests/tests.rs benches/benches.rs | grep -v "found TODO" || exit 0
 
 rocksdb: 
-	DEPS_PATH=$(DEPS_PATH) ./scripts/build_rocksdb.sh
+	@DIST_PATH=$(DIST_PATH) ./scripts/build_rocksdb.sh
 
 $(BIN_PATH)/etcd: 
-	@DEPS_PATH=$(DEPS_PATH) BIN_PATH=$(BIN_PATH) ./scripts/build_etcd.sh
+	@DIST_PATH=$(DIST_PATH) BIN_PATH=$(BIN_PATH) ./scripts/build_etcd.sh
 
 etcd: $(BIN_PATH)/etcd
 
 $(BIN_PATH)/pd-server: 
-	@DEPS_PATH=$(DEPS_PATH) BIN_PATH=$(BIN_PATH) ./scripts/build_pd.sh
+	@DIST_PATH=$(DIST_PATH) BIN_PATH=$(BIN_PATH) ./scripts/build_pd.sh
 
 pd: $(BIN_PATH)/pd-server
 
 $(BIN_PATH)/tidb-server: 
-	@DEPS_PATH=$(DEPS_PATH) BIN_PATH=$(BIN_PATH) ./scripts/build_tidb.sh
+	@DIST_PATH=$(DIST_PATH) BIN_PATH=$(BIN_PATH) ./scripts/build_tidb.sh
 
 tidb: $(BIN_PATH)/tidb-server
 
@@ -63,4 +63,4 @@ clean_tidb:
 
 clean:
 	cargo clean
-	@rm -rf $(DEPS_PATH) $(BIN_PATH)
+	@rm -rf $(DIST_PATH) $(BIN_PATH)
